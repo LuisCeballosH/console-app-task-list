@@ -98,8 +98,83 @@ const input = async (message) => {
     return description;
 }
 
+const listDelete = async (tareas = []) => {
+    const choices = tareas.map((tarea, i) => {
+        let idx = `${i + 1}.`.green
+
+        return {
+            value: tarea.id,
+            name: `${idx} ${tarea.description}`
+        }
+    })
+
+    choices.unshift({
+        value: '0',
+        name: '0. '.green + 'Cancelar'
+    })
+
+    const questions = [
+        {
+            type: 'list',
+            name: 'id',
+            message: 'Borrar',
+            choices
+        }
+    ]
+
+
+    const { id } = await inquirer.prompt(questions);
+
+    return id;
+
+}
+
+const checkList = async (tareas = []) => {
+    const choices = tareas.map((tarea, i) => {
+        let idx = `${i + 1}.`.green
+
+        return {
+            value: tarea.id,
+            name: `${idx} ${tarea.description}`,
+            checked: tarea.completed ? true : false
+        }
+    })
+
+    const question = [
+        {
+            type: 'checkbox',
+            name: 'ids',
+            message: 'Selecciones',
+            choices
+        }
+    ]
+
+
+    const { ids } = await inquirer.prompt(question);
+
+    return ids;
+
+}
+
+const confirm = async (message) => {
+
+    const question = [
+        {
+            type: 'confirm',
+            name: 'ok',
+            message
+        }
+    ]
+
+    const { ok } = await inquirer.prompt(question);
+    return ok;
+}
+
 module.exports = {
     inquirerMenu,
     pause,
-    input
+    input,
+    listDelete,
+    confirm,
+    checkList
 }

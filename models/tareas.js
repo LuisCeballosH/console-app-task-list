@@ -27,6 +27,30 @@ class Tareas {
         })
     }
 
+    delete(id) {
+        if (this.listO[id]) {
+            delete this.listO[id];
+        }
+    }
+
+    toggle(ids = []) {
+
+        ids.forEach(id => {
+            const tarea = this.listO[id];
+            if (!tarea.completed) {
+                tarea.completed = new Date().toISOString();
+            }
+        })
+
+        this.listArray.forEach(tarea => {
+            if (!ids.includes(tarea.id)) {
+                this.listO[tarea.id].completed = null;
+            }
+        })
+
+
+    }
+
     list(tareas = []) {
         console.log();
         this.listArray.forEach((task, i) => {
@@ -46,7 +70,7 @@ class Tareas {
             const state = completed ? 'Completada'.green : 'Pendiente'.red;
             if (value) {
                 if (completed) {
-                    console.log(`${(i + '.').toString().green} ${description} :: ${state}`);
+                    console.log(`${(i + '.').toString().green} ${description} :: ${state} :: ${completed.green}`);
                 }
             } else {
                 if (!completed) {

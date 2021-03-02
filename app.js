@@ -1,5 +1,5 @@
 const { save, read } = require('./helpers/db');
-const { inquirerMenu, pause, input } = require('./helpers/inquirer');
+const { inquirerMenu, pause, input, listDelete, confirm, checkList } = require('./helpers/inquirer');
 const Tareas = require('./models/tareas');
 
 require('colors');
@@ -37,6 +37,23 @@ const main = async () => {
 
             case '4':
                 tareas.listCompletadaPendiente(false);
+                break;
+
+            case '5':
+                const ids = await checkList(tareas.listArray);
+                tareas.toggle(ids)
+                break;
+
+            case '6':
+                const id = await listDelete(tareas.listArray);
+                if (id !== '0') {
+                    const ok = await confirm('¿Estaá seguro?');
+                    console.log({ ok });
+                    if (ok) {
+                        tareas.delete(id);
+                        console.log('Tarea Borrada');
+                    }
+                }
                 break;
 
             default:
